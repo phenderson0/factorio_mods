@@ -15,6 +15,7 @@ The AI agent can perform a wide range of tasks, giving it strong capabilities to
 * **Crafting**: Instruct the character to manually craft recipes from their available ingredients (`craft`).
 * **Building**: Place buildings and entities into the world with specific orientations (`build`).
 * **Item Transfer**: Seamlessly move items between the character's inventory and various interactable machines (furnaces, assembling machines, containers, mining drills) using `insert_items` and `take_items`.
+* **Research**: View available technologies, their costs, the current research queue, and queue up new research (`get_available_research`, `get_research_queue`, `queue_research`).
 
 ## Usage
 
@@ -41,3 +42,6 @@ The MCP server exposes the following tools:
 - `build(item_name, x, y, direction)`
 - `take_items(x, y, item_name, count)`
 - `insert_items(x, y, item_name, count)`
+- `get_available_research()`
+- `get_research_queue()`
+- `queue_research(technology_name)`

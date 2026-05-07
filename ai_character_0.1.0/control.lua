@@ -277,5 +277,58 @@ remote.add_interface("ai", {
             return inserted
         end
         return 0
+    end,
+
+    get_available_research = function()
+        if not (storage.ai_character and storage.ai_character.valid) then return {} end
+        local force = storage.ai_character.force
+        local result = {}
+        for name, tech in pairs(force.technologies) do
+            if not tech.researched and tech.enabled then
+                local can_research = true
+                for _, prereq in pairs(tech.prerequisites) do
+                    if not prereq.researched then
+                        can_research = false
+                        break
+                    end
+                end
+                
+                if can_research then
+                    local ingredients = {}
+                    for _, ing in pairs(tech.research_unit_ingredients) do
+                        table.insert(ingredients, {name = ing.name, amount = ing.amount})
+                    end
+                    table.insert(result, {
+                        name = name,
+                        cost = tech.research_unit_count,
+                        energy = tech.research_unit_energy,
+                        ingredients = ingredients
+                    })
+                end
+            end
+        end
+        return result
+    end,
+
+    get_research_queue = function()
+        if not (storage.ai_character and storage.ai_character.valid) then return {} end
+        local force = storage.ai_character.force
+        local result = {}
+        local queue = force.research_queue
+        if queue then
+            for _, tech in ipairs(queue) do
+                table.insert(result, tech.name)
+            end
+        end
+        return result
+    end,
+
+    queue_research = function(tech_name)
+        if not (storage.ai_character and storage.ai_character.valid) then return false end
+        local force = storage.ai_character.force
+        local tech = force.technologies[tech_name]
+        if not tech then return false end
+        if tech.researched then return false end
+        return force.add_research(tech)
     end
 })

@@ -22,7 +22,7 @@ def run_lua(script: str) -> str:
                 "else rcon.print(tostring(res)) end"
             )
             print(f"[Factorio MCP] Sending command: {script}", file=sys.stderr)
-            response = mcr.command(f"/c {lua_wrapper}")
+            response = mcr.command(f"/silent-command {lua_wrapper}")
             print(f"[Factorio MCP] Response: {response}", file=sys.stderr)
             return response
     except Exception as e:
@@ -96,6 +96,24 @@ def take_items(x: float, y: float, item_name: str, count: int) -> str:
 def insert_items(x: float, y: float, item_name: str, count: int) -> str:
     """Insert items from the AI's inventory into a container/furnace/machine at x, y. Returns the actual amount inserted."""
     lua_code = f"remote.call('ai', 'insert_items', {x}, {y}, '{item_name}', {count})"
+    return run_lua(lua_code)
+
+@mcp.tool()
+def get_available_research() -> str:
+    """Get a list of technologies that are currently available to be researched, along with their costs."""
+    lua_code = "remote.call('ai', 'get_available_research')"
+    return run_lua(lua_code)
+
+@mcp.tool()
+def get_research_queue() -> str:
+    """Get the current research queue."""
+    lua_code = "remote.call('ai', 'get_research_queue')"
+    return run_lua(lua_code)
+
+@mcp.tool()
+def queue_research(technology_name: str) -> str:
+    """Add a technology to the research queue. Returns true if successful."""
+    lua_code = f"remote.call('ai', 'queue_research', '{technology_name}')"
     return run_lua(lua_code)
 
 if __name__ == "__main__":
