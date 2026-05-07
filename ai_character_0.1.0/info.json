@@ -1,0 +1,9 @@
+{
+  "name": "ai_character",
+  "version": "0.1.0",
+  "title": "AI Character API",
+  "author": "Antigravity",
+  "factorio_version": "2.0",
+  "dependencies": ["? base"],
+  "description": "Spawns an autonomous character that can be controlled via an MCP interface over RCON."
+}
